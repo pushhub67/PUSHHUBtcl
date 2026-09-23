@@ -199,7 +199,7 @@ TabHitbox:CreateDropdown({
     Options = {"Ball"},
     CurrentOption = {"Ball"},
     MultipleOptions = false,
-    Callback = function(opt) State.Hitbox.Target = opt[1]; ResetSizes(); ClearAdornments() end,
+    Callback = function(opt) State.Hitbox.Target = opt; ResetSizes(); ClearAdornments() end,
 })
 
 TabHitbox:CreateDropdown({
@@ -207,7 +207,7 @@ TabHitbox:CreateDropdown({
     Options = {"Box", "Sphere"},
     CurrentOption = {"Sphere"},
     MultipleOptions = false,
-    Callback = function(opt) State.Hitbox.Shape = opt[1] end,
+    Callback = function(opt) State.Hitbox.Shape = opt end,
 })
 
 TabHitbox:CreateDropdown({
@@ -318,9 +318,3 @@ UserInputService.JumpRequest:Connect(function()
         LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
     end
 end)
-
-Rayfield:Notify({
-    Title = "Push Hub",
-    Content = "Script by PUSH Hub - Activated!",
-    Duration = 1,
-})
