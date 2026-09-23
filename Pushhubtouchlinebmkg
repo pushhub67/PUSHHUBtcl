@@ -40,13 +40,6 @@ local Colors = {
     ["Black"] = Color3.fromRGB(0, 0, 0)
 }
 
--- Target limbs untuk hit normal maupun saat sleding/tackle
-local SlideLimbNames = {
-    "HumanoidRootPart", "Torso", "LowerTorso", "UpperTorso",
-    "Right Leg", "RightFoot", "RightLowerLeg", "RightUpperLeg",
-    "Left Leg", "LeftFoot", "LeftLowerLeg", "LeftUpperLeg"
-}
-
 -- ================= PING UI SETUP =================
 local PingGui = Instance.new("ScreenGui")
 PingGui.Name = "PushHubPingMonitor"
@@ -153,18 +146,16 @@ local function ExpandHitbox(part, hrp, char)
     part.CanQuery = true 
     part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
     
-    -- [SISTEM HITBOX GOIB & SLEDING HIT LOGIC]
+    -- [ALL-SITUATION GOIB ENGINE: Sleding, Save, Umpan Atas/Bawah, Tendang]
     if hrp and char then
         local distFromPlayer = (hrp.Position - part.Position).Magnitude
         local goibReach = math.max(desiredSize * 3, 120) 
         
         if distFromPlayer <= goibReach then 
             if firetouchinterest then
-                -- Ambil semua bagian tubuh bawah & torso yang aktif saat sleding
                 pcall(function()
-                    for _, name in ipairs(SlideLimbNames) do
-                        local limb = char:FindFirstChild(name)
-                        if limb then
+                    for _, limb in ipairs(char:GetChildren()) do
+                        if limb:IsA("BasePart") then
                             firetouchinterest(limb, part, 0)
                             firetouchinterest(limb, part, 1)
                         end
@@ -176,14 +167,14 @@ local function ExpandHitbox(part, hrp, char)
 end
 
 -- ================= TABS =================
-local TabHitbox = Window:CreateTab("Hitbox (Aggressive)", 4483345998)
+local TabHitbox = Window:CreateTab("Hitbox", 4483345998)
 local TabESP = Window:CreateTab("ESP", 4483362458)
 local TabMovement = Window:CreateTab("Movement", 4483347333)
 local TabPotato = Window:CreateTab("Potato", 4483345998)
 
--- ================= HITBOX (AGGRESSIVE) TAB =================
+-- ================= HITBOX TAB =================
 TabHitbox:CreateToggle({
-    Name = "Enable Hitbox (Aggressive)",
+    Name = "Enable Hitbox",
     CurrentValue = false,
     Callback = function(v) State.Hitbox.Enabled = v; if not v then ResetSizes(); ClearAdornments() end end,
 })
@@ -331,5 +322,5 @@ end)
 Rayfield:Notify({
     Title = "Push Hub",
     Content = "Script by PUSH Hub - Activated!",
-    Duration = 5,
+    Duration = 1,
 })
